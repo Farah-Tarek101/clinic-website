@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 "node_modules/" 
+=======
+node_modules/
+>>>>>>> b9a5f26 (Initial commit for clinic website)
+.env"clinic/backend/.env" 
+"clinic/backend/.env" 
