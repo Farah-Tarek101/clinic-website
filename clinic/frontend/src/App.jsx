@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import React, { useContext, useEffect } from "react";
 import {
@@ -29,6 +28,9 @@ import Settings from "./Pages/settings/Settings";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 
+// Use environment variable for API base URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
+
 // Helper component to handle token from URL
 const TokenHandler = () => {
   const location = useLocation();
@@ -47,7 +49,7 @@ const TokenHandler = () => {
       if (userId) {
         const fetchUserDetails = async () => {
           try {
-            const response = await axios.get("http://localhost:4000/api/v1/user/profile", {
+            const response = await axios.get(`${API_BASE_URL}/api/v1/user/profile`, {
               headers: { Authorization: `Bearer ${token}` },
               withCredentials: true,
             });
@@ -86,7 +88,7 @@ const App = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:4000/api/v1/user/profile", {
+        const response = await axios.get(`${API_BASE_URL}/api/v1/user/profile`, {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
@@ -109,33 +111,33 @@ const App = () => {
     };
 
     fetchUser();
-  }, []); // Empty dependency array ensures this only runs once when the app starts
+  }, [setIsAuthenticated, setUser]); // ✅ Fixes missing dependencies
 
   return (
     <I18nextProvider i18n={i18n}>
-    <>
-      <Router>
-        <TokenHandler /> {/* Handles token extraction from URL */}
-        <Navbar />
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/appointment" element={isAuthenticated ? <Appointment /> : <Navigate to="/login" />} />
-          <Route path="/departments" element={<Departments />} />
-          <Route path="/orthopedics" element={<Orthopedics />} />
-          <Route path="/physical-therapy" element={<PhysicalTherapy />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/signup" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/settings" element={<Settings />} />
-          {/* Protected routes */}
-          <Route path="/profile" element={isAuthenticated ? <PatientProfile /> : <Navigate to="/login" />} />
-        </Routes>
-        <Footer />
-        <ToastContainer position="top-center" />
-      </Router>
-    </>
+      <>
+        <Router basename="/"> {/* ✅ Ensures proper routing on Vercel */}
+          <TokenHandler /> {/* ✅ Handles token extraction from URL */}
+          <Navbar />
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/appointment" element={isAuthenticated ? <Appointment /> : <Navigate to="/login" />} />
+            <Route path="/departments" element={<Departments />} />
+            <Route path="/orthopedics" element={<Orthopedics />} />
+            <Route path="/physical-therapy" element={<PhysicalTherapy />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/signup" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/settings" element={<Settings />} />
+            {/* Protected routes */}
+            <Route path="/profile" element={isAuthenticated ? <PatientProfile /> : <Navigate to="/login" />} />
+          </Routes>
+          <Footer />
+          <ToastContainer position="top-center" />
+        </Router>
+      </>
     </I18nextProvider>
   );
 };
