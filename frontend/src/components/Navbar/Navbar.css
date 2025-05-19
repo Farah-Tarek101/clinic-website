@@ -1,0 +1,149 @@
+/* Transparent Navbar (Home Page) */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 80px; 
+}
+
+.navbar.transparent {
+  background: transparent; /* Transparent background */
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  color: white; /* White text for Home page */
+}
+
+/* White Navbar with Dark Blue Links (All Pages except Home) */
+.navbar.blue {
+  background: white; /* White background */
+  color: #003366; /* Dark blue text color */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Slight shadow */
+}
+
+/* Common Navbar Styles */
+/* Navbar.css */
+nav .logo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align logo to the left */
+  padding: 5px;
+}
+
+/* Navbar.css */
+.logo-img {
+  height: 150px; /* Adjust height as needed */
+  width: 150px;  /* Maintain aspect ratio */
+  max-width: 100%; /* Ensure the logo doesn't overflow */
+  object-fit: contain; /* Make sure the image fits within the defined height */
+}
+
+/* Navigation Links Centered */
+nav .navLinks {
+  flex: 2; /* Center section */
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+nav .navLinks .links a {
+  text-decoration: none;
+  color: inherit;
+  font-size: 22px;
+  padding: 5px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  font-weight: 800;
+}
+
+/* Hover color for links */
+nav .navLinks .links a:hover {
+  color: yellow; /* Change to yellow on hover */
+}
+
+/* Auth Buttons on the Right */
+.authButtons {
+  flex: 1; /* Right section */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.authButtons .btn {
+  color:#06005c;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.authButtons .btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 1100px) {
+  .authButtons {
+      flex-direction: column;
+      gap: 15px;
+  }
+
+  .navLinks {
+      display: none;
+  }
+
+  .navLinks.showmenu {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      width: 100%;
+      padding: 20px;
+      z-index: 100;
+  }
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: none;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.dropdown-menu.show {
+  display: flex;
+}
+
+.dropdown-menu a, .dropdown-menu button {
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdown-menu a:hover, .dropdown-menu button:hover {
+  background-color: #f0f0f0;
+}

@@ -1,0 +1,429 @@
+/* Settings.css */
+/* Move Settings Box Down */
+.settings-container {
+  max-width: 800px;
+  margin: 120px auto; /* Increased margin-top to push it down */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+/* Ensure Footer Stays at the Bottom */
+.footer {
+  position: fixed;
+  bottom: -5;
+  width: 100%;
+  background-color: #06005c; /* Adjust color as needed */
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
+
+
+.dark-mode .settings-container {
+  background-color: #1e2235;
+  color: #e6f0ff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.settings-container h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #06005c;
+}
+
+.dark-mode .settings-container h2 {
+  color: #4d97ff;
+}
+
+.setting-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+  font-size: 1.2rem;
+}
+
+.setting-option select,
+.setting-option input[type="checkbox"] {
+  padding: 8px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.dark-mode .setting-option select,
+.dark-mode .setting-option input[type="checkbox"] {
+  background-color: #1e2235;
+  color: #e6f0ff;
+  border: 1px solid #3d4361;
+}
+
+
+.dark-mode .settings-container {
+  background-color: #1e2235;
+  color: #e6f0ff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.settings-container h1 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eaeaea;
+  color: #06005c;
+}
+
+.dark-mode .settings-container h1 {
+  border-bottom: 1px solid #3d4361;
+  color: #4d97ff;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.dark-mode .setting-item {
+  border-bottom: 1px solid #3d4361;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-item span {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.toggle-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f1f5ff;
+  color: #000638;
+  transition: all 0.2s ease;
+}
+
+.dark-mode .toggle-btn {
+  background-color: #1d34ff;
+  color: #e6f0ff;
+}
+
+.toggle-btn:hover {
+  background-color: #4d97ff;
+  color: #e6f0ff;
+}
+
+.dark-mode .toggle-btn:hover {
+  background-color: #4d97ff;
+}
+
+/* Global Dark Mode Styles */
+.dark-mode {
+  background-color: #1e2235;
+  color: #e6f0ff;
+}
+
+/* About Section Dark Mode */
+.dark-mode .about-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  flex-wrap: wrap;
+  background-color: #1e2235;
+}
+
+.dark-mode .about-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #4d97ff;
+}
+
+.dark-mode .about-content p {
+  font-size: 1.5rem;
+  line-height: 1.8;
+  color: #e6f0ff;
+}
+
+/* Vision Section Dark Mode */
+.dark-mode .vision-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  flex-wrap: wrap;
+  background-color: #1e2235;
+}
+
+.dark-mode .vision-section h2,
+.dark-mode .vision-section h3 {
+  color: #4d97ff;
+}
+
+.dark-mode .vision-section p {
+  color: #e6f0ff;
+}
+
+.dark-mode .vision-content {
+  max-width: 700px;
+  text-align: left;
+  background-color: #1e2235;
+  padding: 40px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Mission Section Dark Mode */
+.dark-mode .mission-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  flex-wrap: wrap;
+  background-color: #1e2235;
+}
+
+.dark-mode .mission-section h2,
+.dark-mode .mission-section h3 {
+  color: #4d97ff;
+}
+
+.dark-mode .mission-section p {
+  color: #e6f0ff;
+}
+
+/* Home Component Dark Mode */
+.dark-mode .home {
+  color: #e6f0ff;
+  background-color: #1e2235;
+}
+
+.dark-mode .overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.dark-mode .call-now-btn {
+  background-color: #1d34ff;
+  color: #e6f0ff;
+}
+
+.dark-mode .call-now-btn:hover {
+  background-color: #4d97ff;
+}
+
+/* Cards Dark Mode */
+.dark-mode .home-cards-container {
+  background-color: #1e2235;
+}
+
+.dark-mode .home-card {
+  background-color: #1e2235;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .home-card:hover {
+  background-color: #252836;
+}
+
+.dark-mode .home-card button {
+  background-color: #1d34ff;
+  color: #e6f0ff;
+}
+
+.dark-mode .home-card button:hover {
+  background-color: #4d97ff;
+}
+
+/* Department Container Dark Mode */
+.dark-mode .departments-container {
+  background-color: #1e2235;
+}
+
+.dark-mode.departments {
+  padding-top: 30px;
+  padding-bottom: 50px;
+  position: center;
+  background-color: #1e2235;
+}
+
+.dark-mode .departments h1 {
+  font-size: 40px;
+  margin-bottom: 100px;
+  font-weight: bold;
+  position: relative;
+  padding-bottom: 10px;
+  color: #4d97ff;
+}
+
+/* Message Form Dark Mode */
+.dark-mode .contact-us h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #06005c;
+}
+.dark-mode .contact-us p {
+  font-size: 1.25rem;
+  margin-bottom: 30px;
+  color: #e6f0ff;
+}
+.dark-mode .form-component {
+  background-color: #1e2235;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .form-component h2 {
+  color: #4d97ff;
+}
+
+.dark-mode .form-component form input,
+.dark-mode .form-component form select,
+.dark-mode .form-component form textarea {
+  background-color: #1e2235;
+  border: 1px solid #3d4361;
+  color: #e6f0ff;
+}
+
+.dark-mode .form-component form button,
+.dark-mode .get-appointment-btn,
+.dark-mode .cancel-btn {
+  background-color: #1d34ff;
+  color: #e6f0ff;
+}
+
+.dark-mode .form-component form button:hover,
+.dark-mode .get-appointment-btn:hover,
+.dark-mode .cancel-btn:hover {
+  background-color: #4d97ff;
+}
+
+/* Profile Dark Mode */
+.dark-mode .profile-container {
+  background-color: #1e2235;
+  color: #e6f0ff;
+}
+
+.dark-mode .banner {
+  background-color: #1e2235;
+  color: #e6f0ff;
+}
+
+.dark-mode .banner-title {
+  color: #e6f0ff;
+}
+
+.dark-mode .banner-subtitle {
+  color: #e6f0ff;
+}
+
+.dark-mode .user-name {
+  color: #4d97ff;
+}
+
+.dark-mode .info-box {
+  background-color: #1d34ff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .profile-details {
+  background-color: #1e2235;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .profile-header {
+  color: #4d97ff;
+}
+
+.dark-mode .profile-box {
+  background-color: #1e2235;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .profile-box h3 {
+  color: #4d97ff;
+}
+
+.dark-mode .profile-box p {
+  color: #e6f0ff;
+}
+
+.dark-mode .profile-box strong {
+  color: #4d97ff;
+}
+
+.dark-mode .input-field,
+.dark-mode .input-textarea,
+.dark-mode select {
+  background-color: #1e2235;
+  border: 1px solid #3d4361;
+  color: #e6f0ff;
+}
+
+.dark-mode .btn-edit,
+.dark-mode .btn-save,
+.dark-mode .btn-send {
+  background-color: #1d34ff;
+  color: #e6f0ff;
+}
+
+.dark-mode .btn-edit:hover,
+.dark-mode .btn-save:hover,
+.dark-mode .btn-send:hover {
+  background-color: #4d97ff;
+}
+
+.dark-mode .btn-cancel {
+  background-color: #d03b3b;
+}
+
+.dark-mode .btn-cancel:hover {
+  background-color: #e74c3c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .settings-container {
+    width: 90%;
+    padding: 20px;
+    margin-top: 60px;
+  }
+  
+  .setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .toggle-btn {
+    align-self: flex-start;
+  }
+}
+/* Add these to your existing Settings.css */
+[dir="rtl"] .settings-container {
+  text-align: right;
+}
+
+[dir="rtl"] .setting-option {
+  flex-direction: row-reverse;
+}
+
+/* Adjust any other directional styles */
+[dir="rtl"] .setting-option label {
+  margin-left: 0;
+  margin-right: 1rem;
+}
