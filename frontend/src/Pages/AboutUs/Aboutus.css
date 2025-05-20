@@ -1,0 +1,148 @@
+/* Header Section */
+.about-us-header {
+  position: relative;
+  height: 400px; /* Adjust this value as needed */
+  width: 100%;
+  overflow: hidden;
+  margin-top: 80px; /* Adjust based on navbar height */
+}
+
+.header-image {
+  width: 100%; /* Make the image take the full width */
+  height: 100%; /* Make the image take the full height of the header */
+  object-fit: cover; /* Ensure the image covers the entire area without stretching */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1; /* Ensure the image is behind the text */
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Add opacity effect */
+  z-index: 2; /* Overlay on top of the image */
+}
+
+.header-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+}
+
+/* About Section */
+.about-section {
+  display: flex;
+  justify-content: center; /* Centers content horizontally */
+  align-items: center; /* Centers content vertically */
+  gap: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  flex-wrap: wrap; /* Allow content to wrap on smaller screens */
+}
+
+.about-image img {
+  width: 100%;
+  max-width: 500px; /* Increased size */
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover; /* Ensure the image fits well */
+}
+
+.about-content {
+  max-width: 700px; /* Increased size */
+  text-align: left; /* Align text to the left */
+}
+
+.about-content h2 {
+  font-size: 2.5rem; /* Increased font size */
+  margin-bottom: 15px; /* Increased spacing */
+  color: #06005c;
+}
+
+.about-content p {
+  font-size: 1.5rem; /* Increased font size */
+  line-height: 1.8; /* Increased line height */
+  color: #06005c;
+}
+
+/* Mission Section */
+.mission-section {
+  display: flex;
+  justify-content: center; /* Centers content horizontally */
+  align-items: center; /* Centers content vertically */
+  gap: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  flex-wrap: wrap; /* Allow content to wrap on smaller screens */
+}
+
+.mission-image img {
+  width: 100%;
+  max-width: 500px; /* Increased size */
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover; /* Ensure the image fits well */
+}
+
+.mission-content {
+  max-width: 700px; /* Increased size */
+  text-align: left; /* Align text to the left */
+}
+
+.mission-content h2 {
+  font-size: 2.5rem; /* Increased font size */
+  margin-bottom: 15px; /* Increased spacing */
+  color: #06005c;
+}
+
+.mission-content p {
+  font-size: 1.5rem; /* Increased font size */
+  line-height: 1.8; /* Increased line height */
+  color: #06005c;
+}
+
+/* Founder's Vision Section */
+.vision-section {
+  display: flex;
+  justify-content: center; /* Centers content horizontally */
+  align-items: center; /* Centers content vertically */
+  gap: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  color: #06005c;
+  flex-wrap: wrap; /* Allow content to wrap on smaller screens */
+}
+
+.vision-image img {
+  width: 100%;
+  max-width: 500px; /* Increased size */
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover; /* Ensure the image fits well */
+}
+
+.vision-content {
+  max-width: 700px; /* Increased size */
+  text-align: left; /* Align text to the left */
+}
+
+.vision-content h2 {
+  font-size: 2.5rem; /* Increased font size */
+  margin-bottom: 15px; /* Increased spacing */
+  color: #06005c;
+}
+
+.vision-content p {
+  font-size: 1.5rem; /* Increased font size */
+  line-height: 1.8; /* Increased line height */
+  color: #06005c;
+}

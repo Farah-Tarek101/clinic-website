@@ -1,0 +1,137 @@
+/* Appointment Form Styles */
+.form-component h2 {
+  color: #06005c; /* Change color of h2 */
+}
+
+.form-component {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-component form div {
+  margin-bottom: 20px;
+}
+
+.form-component form input,
+.form-component form select,
+.form-component form textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-component form textarea {
+  resize: vertical;
+}
+
+.form-component form select {
+  cursor: pointer;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.get-appointment-btn,
+.cancel-btn {
+  background-color: #06005c; /* Green for appointment button */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 48%; /* Adjusts width so both buttons fit side by side */
+}
+
+.cancel-btn {
+  background-color: #06005c; /* Red for cancel button */
+}
+
+.get-appointment-btn:hover {
+  background-color: #4d97ff; /* Darker green on hover */
+}
+
+.cancel-btn:hover {
+  background-color: #4d97ff; /* Darker red on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 888px) {
+  .form-component {
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+  .form-component form div {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 667px) {
+  .form-component form input,
+  .form-component form select,
+  .form-component form textarea {
+    font-size: 20px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 1110px) {
+  .appointment-form form div:nth-child(4) {
+    flex-direction: column;
+  }
+  .appointment-form form div:nth-child(5) {
+    flex-direction: column;
+  }
+}
+
+/* Button container styles */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+/* Adjust button styles */
+.get-appointment-btn,
+.cancel-btn {
+  background-color: #06005c; /* Dark purple */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 48%; /* Ensures the buttons fit side by side */
+}
+
+/* Hover effects */
+.get-appointment-btn:hover {
+  background-color: #4d97ff; /* Lighter blue on hover */
+}
+
+.cancel-btn:hover {
+  background-color: #4d97ff; /* Lighter blue on hover */
+}
+
+.get-appointment-btn {
+  order: 2; /* Moves the 'Get Appointment' button to the right */
+}
+
+.cancel-btn {
+  order: 1; /* Moves the 'Cancel' button to the left */
+}
