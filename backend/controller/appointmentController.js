@@ -2,6 +2,7 @@ import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js";
 import { Appointment } from "../models/appointmentSchema.js";
 import { User } from "../models/userSchema.js";
+
 export const postAppointment = catchAsyncErrors(async (req, res, next) => {
   const {
     fullName,
@@ -16,14 +17,13 @@ export const postAppointment = catchAsyncErrors(async (req, res, next) => {
     address,
   } = req.body;
 
-  // Ensure user is authenticated (Google login or normal login)
+  // Ensure user is authenticated
   if (!req.user) {
     return next(new ErrorHandler("User not authenticated!", 401));
   }
 
-  // Use authenticated user's email if they are logged in via Google
-  const userEmail = req.user.email || email;
-  const userFullName = req.user.fullName || fullName;
+  const userEmail = req.user.email;
+  const userFullName = req.user.fullName;
 
   if (
     !userFullName ||
@@ -36,15 +36,38 @@ export const postAppointment = catchAsyncErrors(async (req, res, next) => {
     !doctor_fullName ||
     !address
   ) {
-    return next(new ErrorHandler("Please Fill Full Form!", 400));
+    return next(new ErrorHandler("Please fill the full form!", 400));
   }
 
+const trimmedEmail = email.trim();
+const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail|yahoo)\.com$/;
+
+console.log("Email from body:", email);
+console.log("Trimmed Email:", trimmedEmail);
+
+if (!emailRegex.test(trimmedEmail)) {
+  return next(new ErrorHandler("Email must be a Gmail or Yahoo address.", 400));
+}
+
+
+  // Ensure email matches the logged-in user's email
+  if (email !== userEmail) {
+    return next(new ErrorHandler("Email does not match logged-in user.", 403));
+  }
+
+  // Validate phone number format
+  if (!/^\d{10,15}$/.test(phone)) {
+    return next(new ErrorHandler("Phone number must be between 10 and 15 digits.", 400));
+  }
+
+  // Prevent booking in the past
   const currentDate = new Date();
   const appointmentDate = new Date(appointment_date);
   if (appointmentDate < currentDate) {
     return next(new ErrorHandler("Appointment cannot be booked in the past!", 400));
   }
 
+  // Find doctor
   const doctor = await User.findOne({
     fullName: doctor_fullName,
     role: "Doctor",
@@ -52,9 +75,10 @@ export const postAppointment = catchAsyncErrors(async (req, res, next) => {
   });
 
   if (!doctor) {
-    return next(new ErrorHandler("Doctor not found", 404));
+    return next(new ErrorHandler("Doctor not found.", 404));
   }
 
+  // Create appointment
   const appointment = await Appointment.create({
     fullName: userFullName,
     email: userEmail,
@@ -69,7 +93,7 @@ export const postAppointment = catchAsyncErrors(async (req, res, next) => {
     hasVisited,
     address,
     doctorId: doctor._id,
-    patientId: req.user._id, // Ensure patientId is assigned to Google users
+    patientId: req.user._id,
   });
 
   res.status(200).json({
@@ -78,7 +102,6 @@ export const postAppointment = catchAsyncErrors(async (req, res, next) => {
     message: "Appointment Sent!",
   });
 });
-
 
 
 export const getAllAppointments = catchAsyncErrors(async (req, res, next) => {
