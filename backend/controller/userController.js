@@ -381,91 +381,58 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
       temperature,
     } = req.body;
 
-    const updates = {};
-
-    // Validate and update fullName
-    if (fullName !== undefined) {
-      if (fullName.trim() === "") {
-        return next(new ErrorHandler("Full name cannot be empty.", 400));
-      }
-      updates.fullName = fullName;
+    // Validate phone number: only digits and length must be exactly 11 (Egypt standard)
+    if (!/^\d{11}$/.test(phone)) {
+      return next(new ErrorHandler("Invalid phone number. It must be 11 digits.", 400));
     }
 
-    // Validate and update email
-    if (email !== undefined) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return next(new ErrorHandler("Invalid email format.", 400));
-      }
-
-      const existingUser = await User.findOne({ email });
-      if (existingUser && existingUser._id.toString() !== req.user._id.toString()) {
-        return next(new ErrorHandler("Email already in use by another user.", 400));
-      }
-      updates.email = email;
+    // Check if the new email is already used by another user
+    const existingUser = await User.findOne({ email });
+    if (existingUser && existingUser._id.toString() !== req.user.id) {
+      return next(new ErrorHandler("Email is already taken by another user.", 400));
     }
 
-    // Validate phone number
-    if (phone !== undefined) {
-      if (!/^\d{11}$/.test(phone)) {
-        return next(new ErrorHandler("Phone number must be exactly 11 digits.", 400));
+    // Validate numeric fields if they are present
+    const numericFields = { bloodPressure, oxygenLevel, heartRate, temperature };
+    for (const [key, value] of Object.entries(numericFields)) {
+      if (value !== undefined && isNaN(value)) {
+        return next(new ErrorHandler(`${key} must be a number.`, 400));
       }
-      updates.phone = phone;
     }
 
-    // Validate and update DOB
-    if (dob !== undefined) {
-      if (dob.trim() === "") {
-        return next(new ErrorHandler("Date of birth cannot be empty.", 400));
-      }
-      updates.dob = dob;
-    }
-
-    // Validate and update gender
-    if (gender !== undefined) {
-      if (gender.trim() === "") {
-        return next(new ErrorHandler("Gender cannot be empty.", 400));
-      }
-      updates.gender = gender;
-    }
-
-    // Validate complain: must contain at least one letter
-    if (complain !== undefined) {
-      const hasLetter = /[a-zA-Z]/.test(complain);
-      if (!hasLetter) {
-        return next(new ErrorHandler("Complain must contain at least one letter.", 400));
-      }
-      updates.complain = complain;
-    }
-
-    // Other optional updates (no strict validation)
-    if (medicalHistory !== undefined) updates.medicalHistory = medicalHistory;
-    if (bloodPressure !== undefined) updates.bloodPressure = bloodPressure;
-    if (oxygenLevel !== undefined) updates.oxygenLevel = oxygenLevel;
-    if (heartRate !== undefined) updates.heartRate = heartRate;
-    if (temperature !== undefined) updates.temperature = temperature;
-
-    const updatedUser = await User.findByIdAndUpdate(req.user._id, updates, {
-      new: true,
-      runValidators: true,
-    });
+    // Perform the update
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        fullName,
+        email,
+        phone,
+        dob,
+        gender,
+        medicalHistory,
+        complain,
+        bloodPressure,
+        oxygenLevel,
+        heartRate,
+        temperature,
+      },
+      { new: true, runValidators: true }
+    );
 
     if (!updatedUser) {
-      return next(new ErrorHandler("User not found.", 404));
+      return next(new ErrorHandler("User not found!", 404));
     }
 
     res.status(200).json({
       success: true,
-      message: "Profile updated successfully",
       user: updatedUser,
     });
 
   } catch (error) {
-    console.error("Error in updateProfile:", error);
-    return next(new ErrorHandler("Profile update failed", 500));
+    console.error("Error updating profile:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 });
-
 
 
 // Get User Profile
