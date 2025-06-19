@@ -1,0 +1,13 @@
+{
+  "adminDashboard": "Admin Dashboard",
+  "myAppointments": "My Appointments",
+  "updateAppointment": "Update Appointment",
+  "selectTime": "Select Time",
+  "save": "Save",
+  "cancel": "Cancel",
+  "date": "Date",
+  "time": "Time",
+  "status": "Status",
+  "department": "Department",
+  "noAppointments": "No appointments found"
+} 
