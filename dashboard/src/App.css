@@ -192,8 +192,10 @@ body {
   gap: 20px;
 }
 .dashboard .banner:first-child {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 20px;
   height: auto;
-  flex-direction: column;
 }
 .dashboard .banner:first-child .firstBox {
   flex: 2;
@@ -641,7 +643,7 @@ input[type="time"]:before {
   gap: 10px; /* Space between the buttons */
 }
 
-.update-btn, .delete-btn {
+.delete-btn {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
@@ -649,9 +651,20 @@ input[type="time"]:before {
   border: none;
 }
 
-.update-btn {
-  background: linear-gradient(140deg, #4224d6, #271776ca);
-  color: white;
+.btn-update {
+  z-index: 10;
+  position: relative;
+  pointer-events: auto;
+}
+
+.update-modal {
+  z-index: 1001;
+  position: fixed;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .delete-btn {
@@ -748,12 +761,10 @@ input[type="time"]:before {
   .dashboard .banner:first-child {
     flex-direction: column;
   }
-
   .dashboard .banner:first-child > div {
     width: 100%;
     margin-bottom: 20px;
   }
-
   .dashboard .banner table {
     min-width: 600px; /* Slightly smaller min-width for tablets */
   }

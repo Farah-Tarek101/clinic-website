@@ -1,41 +1,57 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Context } from "../main";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 
 const Login = () => {
-  const { setIsAuthenticated, setDoctor } = useContext(Context);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [role, setRole] = useState("Doctor"); // force doctor role
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.post("http://localhost:4000/api/v1/user/login", {
-        email,
-        password,
-      }, { withCredentials: true });
 
-      setIsAuthenticated(true);
-      setDoctor(data.user);
-      toast.success("Logged in successfully");
-      navigate("/");
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/v1/user/login",
+        {
+          email,
+          password,
+          role, // Must be "Doctor"
+        },
+        {
+          withCredentials: true, // ✅ This sends the cookie to the browser
+        }
+      );
+
+      console.log("✅ Login success", res.data);
+      navigate("/my-patients"); // ✅ Redirect after successful login
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed");
+      console.error("❌ Login error", err.response?.data?.message || err.message);
+      alert(err.response?.data?.message || "Login failed");
     }
   };
+  
 
   return (
-    <div className="login-page">
+    <form onSubmit={handleLogin} style={{ padding: "2rem" }}>
       <h2>Doctor Login</h2>
-      <form onSubmit={handleLogin}>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="Email" />
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="Password" />
-        <button type="submit">Login</button>
-      </form>
-    </div>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        required
+        onChange={(e) => setEmail(e.target.value)}
+      /><br />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        required
+        onChange={(e) => setPassword(e.target.value)}
+      /><br />
+      <button type="submit">Login</button>
+    </form>
   );
 };
 

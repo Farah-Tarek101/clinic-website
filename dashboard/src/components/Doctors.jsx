@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Context } from "../main";
 import { Navigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
+import './Doctors.css';
 
 const Doctors = () => {
   const [doctors, setDoctors] = useState([]);
@@ -16,10 +17,9 @@ const Doctors = () => {
     email: "",
     phone: "",
     nic: "",
-    dob: "",
+    dateOfBirth: "",
     gender: "",
-   
-    doctorDepartment: "",
+    department: "",
   });
 
   // Fetch doctors
@@ -129,39 +129,113 @@ const Doctors = () => {
       <div className="banner">
         {filteredDoctors && filteredDoctors.length > 0 ? (
           filteredDoctors.map((element) => {
+            console.log(element); // Debug: see what fields are present
             return (
               <div className="card" key={element._id}>
-                <div className="details">
-                  <p>
-                    Full Name: <span>{element.fullName}</span>
-                  </p>
-                  <p>
-                    Email: <span>{element.email}</span>
-                  </p>
-                  <p>
-                    Phone: <span>{element.phone}</span>
-                  </p>
-                  <p>
-                    Date of Birth: <span>{element.dateOfBirth}</span>
-                  </p>
-                  <p>
-                    Department: <span>{element.department}</span>
-                  </p>
-                  <p>
-                    NIC: <span>{element.nic}</span>
-                  </p>
-                  <p>
-                    Gender: <span>{element.gender}</span>
-                  </p>
-                </div>
-                <div className="btn-group">
-                  <button
-                    className="btn btn-delete"
-                    onClick={() => handleDelete(element._id)}
-                  >
-                    Delete
-                  </button>
-                </div>
+                {editingDoctor && editingDoctor._id === element._id ? (
+                  <form onSubmit={handleUpdateDoctor}>
+                    <label>Full Name</label>
+                    <input
+                      type="text"
+                      value={updateData.fullName}
+                      onChange={(e) => setUpdateData({ ...updateData, fullName: e.target.value })}
+                      required
+                    />
+                    <label>Email</label>
+                    <input
+                      type="email"
+                      value={updateData.email}
+                      onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
+                      required
+                    />
+                    <label>Phone</label>
+                    <input
+                      type="text"
+                      value={updateData.phone}
+                      onChange={(e) => setUpdateData({ ...updateData, phone: e.target.value })}
+                      required
+                    />
+                    <label>NIC</label>
+                    <input
+                      type="text"
+                      value={updateData.nic}
+                      onChange={(e) => setUpdateData({ ...updateData, nic: e.target.value })}
+                      required
+                    />
+                    <label>Date of Birth</label>
+                    <input
+                      type="date"
+                      value={updateData.dateOfBirth}
+                      onChange={(e) => setUpdateData({ ...updateData, dateOfBirth: e.target.value })}
+                      required
+                    />
+                    <label>Gender</label>
+                    <select
+                      value={updateData.gender}
+                      onChange={(e) => setUpdateData({ ...updateData, gender: e.target.value })}
+                      required
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                    <label>Department</label>
+                    <select
+                      value={updateData.department}
+                      onChange={(e) => setUpdateData({ ...updateData, department: e.target.value })}
+                      required
+                    >
+                      <option value="">Select Department</option>
+                      <option value="Physical Therapy">Physical Therapy</option>
+                      <option value="Orthopedics">Orthopedics</option>
+                    </select>
+                    <button type="submit" className="save-btn">Save</button>
+                    <button
+                      type="button"
+                      onClick={() => setEditingDoctor(null)}
+                      className="cancel-btn"
+                    >
+                      Cancel
+                    </button>
+                  </form>
+                ) : (
+                  <>
+                    <div className="details">
+                      <p>Full Name: <span>{element.fullName}</span></p>
+                      <p>Email: <span>{element.email}</span></p>
+                      <p>Phone: <span>{element.phone}</span></p>
+                      <p>Date of Birth: <span>{(element.dateOfBirth && element.dateOfBirth.trim() !== '' ? element.dateOfBirth : (element.dob && element.dob.trim() !== '' ? element.dob : 'Not Provided'))}</span></p>
+                      <p>Department: <span>{(element.department && element.department.trim() !== '' ? element.department : (element.doctorDepartment && element.doctorDepartment.trim() !== '' ? element.doctorDepartment : 'Not Provided'))}</span></p>
+                      <p>NIC: <span>{(element.nic && element.nic.trim() !== '' ? element.nic : (element.NIC && element.NIC.trim() !== '' ? element.NIC : 'Not Provided'))}</span></p>
+                      <p>Gender: <span>{element.gender}</span></p>
+                    </div>
+                    <div className="btn-group">
+                      <button
+                        className="btn btn-update"
+                        onClick={() => {
+                          setEditingDoctor(element);
+                          setUpdateData({
+                            fullName: element.fullName || '',
+                            email: element.email || '',
+                            phone: element.phone || '',
+                            nic: element.nic || '',
+                            dateOfBirth: element.dateOfBirth || '',
+                            gender: element.gender || '',
+                            department: element.department || '',
+                          });
+                        }}
+                      >
+                        Update Doctor
+                      </button>
+                      <button
+                        className="btn btn-delete"
+                        onClick={() => handleDelete(element._id)}
+                      >
+                        Delete Doctor
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             );
           })
@@ -169,78 +243,6 @@ const Doctors = () => {
           <h1>No Registered Doctors Found!</h1>
         )}
       </div>
-
-      {/* Update Form */}
-      {editingDoctor && (
-        <div className="update-modal">
-          <form onSubmit={handleUpdateDoctor}>
-            <h2>Update Doctor</h2>
-            <label>Full Name</label>
-            <input
-              type="text"
-              value={updateData.fullName}
-              onChange={(e) => setUpdateData({ ...updateData, fullName: e.target.value })}
-              required
-            />
-            <label>Email</label>
-            <input
-              type="email"
-              value={updateData.email}
-              onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
-              required
-            />
-            <label>Phone</label>
-            <input
-              type="text"
-              value={updateData.phone}
-              onChange={(e) => setUpdateData({ ...updateData, phone: e.target.value })}
-              required
-            />
-            <label>NIC</label>
-            <input
-              type="text"
-              value={updateData.nic}
-              onChange={(e) => setUpdateData({ ...updateData, nic: e.target.value })}
-              required
-            />
-            <label>Date of Birth</label>
-            <input
-              type="date"
-              value={updateData.dob}
-              onChange={(e) => setUpdateData({ ...updateData, dob: e.target.value })}
-              required
-            />
-            <label>Gender</label>
-            <select
-              value={updateData.gender}
-              onChange={(e) => setUpdateData({ ...updateData, gender: e.target.value })}
-              required
-            >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-            <label>Department</label>
-            <select
-              value={updateData.doctorDepartment}
-              onChange={(e) => setUpdateData({ ...updateData, doctorDepartment: e.target.value })}
-              required
-            >
-              <option value="">Select Department</option>
-              <option value="Physical Therapy">Physical Therapy</option>
-              <option value="Orthopedics">Orthopedics</option>
-            </select>
-            <button type="submit" className="save-btn">Save</button>
-            <button
-              type="button"
-              onClick={() => setEditingDoctor(null)}
-              className="cancel-btn"
-            >
-              Cancel
-            </button>
-          </form>
-        </div>
-      )}
     </section>
   );
 };

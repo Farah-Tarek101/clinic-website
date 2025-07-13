@@ -5,6 +5,8 @@ import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
 import Appointments from "./pages/Appointments";
 import Login from "./pages/Login";
+import DoctorPatients from "./pages/DoctorPatients";
+
 import { Context } from "./main";
 // import ProtectedRoute from "./components/ProtectedRoute"; ❌ Temporarily disable this
 import { ToastContainer } from "react-toastify";
@@ -36,6 +38,8 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/patients" element={<Patients />} />
         <Route path="/appointments" element={<Appointments />} />
+        <Route path="/my-patients" element={<DoctorPatients />} />
+
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
