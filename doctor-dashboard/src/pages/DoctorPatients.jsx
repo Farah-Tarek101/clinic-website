@@ -13,7 +13,7 @@ const DoctorPatients = () => {
 
   const fetchPatients = () => {
     axios
-      .get("http://localhost:4000/api/v1/user/my-patients", {
+      .get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/user/my-patients`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -45,7 +45,7 @@ const DoctorPatients = () => {
   console.log("💾 Saving for ID:", id); // Debug log
 
   try {
-    await axios.put(`http://localhost:4000/api/v1/user/update-medical/${id}`, formData, {
+    await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/v1/user/update-medical/${id}`, formData, {
       withCredentials: true,
     });
 
@@ -160,7 +160,7 @@ const DoctorPatients = () => {
                 <hr />
                 <h4>🩺 Vital Signs</h4>
                 <p><strong>Blood Pressure:</strong> {patient.bloodPressure || "N/A"}</p>
-                <p><strong>Oxygen Level:</strong> {patient.oxygenLevel || "N/A"}%</p>
+                <p><strong>Oxygen Level:</strong> {patient.oxygenLevel || "N/A"} %</p>
                 <p><strong>Heart Rate:</strong> {patient.heartRate || "N/A"} bpm</p>
                 <p><strong>Temperature:</strong> {patient.temperature || "N/A"} °C</p>
                 <button onClick={() => handleEditClick(patient)}>✏️ Edit</button>

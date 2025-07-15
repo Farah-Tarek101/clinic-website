@@ -15,14 +15,13 @@ const Messages = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:4000/api/v1/message/getall",
-          { withCredentials: true }
-        );
-        if (data && data.messages) {
-          console.log("Messages data received from API:", data.messages);
-          setMessages(data.messages);
-          setFilteredMessages(data.messages);
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/message/getall`, {
+          withCredentials: true,
+        });
+        if (response.data && response.data.messages) {
+          console.log("Messages data received from API:", response.data.messages);
+          setMessages(response.data.messages);
+          setFilteredMessages(response.data.messages);
         } else {
           console.log("No messages data received or data.messages is empty.");
           setMessages([]);

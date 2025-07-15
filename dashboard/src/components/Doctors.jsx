@@ -26,13 +26,10 @@ const Doctors = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:4000/api/v1/user/doctors",
-          { withCredentials: true }
-        );
-        if (data && data.doctors) {
-          setDoctors(data.doctors);
-          setFilteredDoctors(data.doctors);
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/user/doctors`, { withCredentials: true });
+        if (response.data && response.data.doctors) {
+          setDoctors(response.data.doctors);
+          setFilteredDoctors(response.data.doctors);
         } else {
           console.log("No doctors data received");
           setDoctors([]);
@@ -61,11 +58,8 @@ const Doctors = () => {
   // Delete doctor
   const handleDelete = async (id) => {
     try {
-      const { data } = await axios.delete(
-        `http://localhost:4000/api/v1/user/doctor/delete/${id}`,
-        { withCredentials: true }
-      );
-      toast.success(data.message);
+      const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/v1/user/doctor/delete/${id}`, { withCredentials: true });
+      toast.success(response.data.message);
       setDoctors(doctors.filter((doctor) => doctor._id !== id));
       setFilteredDoctors(filteredDoctors.filter((doctor) => doctor._id !== id));
     } catch (error) {
@@ -80,21 +74,17 @@ const Doctors = () => {
     console.log("Doctor ID being updated:", editingDoctor._id); // Log the doctor ID being used
 
     try {
-        const { data } = await axios.put(
-            `http://localhost:4000/api/v1/user/doctor/update/${editingDoctor._id}`,
-            updateData,  // Send the updateData object
-            { withCredentials: true }
-        );
+        const response = await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/v1/user/doctor/update/${editingDoctor._id}`, updateData, { withCredentials: true });
 
         // Update the doctor list with the new doctor data
         setDoctors((prevDoctors) =>
             prevDoctors.map((doc) =>
-                doc._id === editingDoctor._id ? { ...doc, ...data.doctor } : doc
+                doc._id === editingDoctor._id ? { ...doc, ...response.data.doctor } : doc
             )
         );
         
         // Show success message
-        toast.success(data.message);
+        toast.success(response.data.message);
         
         // Clear the editing state
         setEditingDoctor(null);

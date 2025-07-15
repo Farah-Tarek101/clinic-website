@@ -17,10 +17,9 @@ const Sidebar = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
   const handleLogout = async () => {
-    await axios
-      .get("http://localhost:4000/api/v1/user/admin/logout", {
-        withCredentials: true,
-      })
+    await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/user/admin/logout`, {
+      withCredentials: true,
+    })
       .then((res) => {
         toast.success(res.data.message);
         setIsAuthenticated(false);

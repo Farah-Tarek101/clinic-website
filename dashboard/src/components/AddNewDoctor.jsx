@@ -38,24 +38,23 @@ const AddNewDoctor = () => {
         doctorDepartment,
       };
 
-      await axios
-        .post("http://localhost:4000/api/v1/user/doctor/addnew", formData, {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        })
-        .then((res) => {
-          toast.success(res.data.message);
-          setIsAuthenticated(true);
-          navigateTo("/");
-          setFullName("");
-          setEmail("");
-          setPhone("");
-          setNic("");
-          setDob("");
-          setGender("");
-          setPassword("");
-          setDoctorDepartment("");
-        });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/user/doctor/addnew`,
+        formData,
+        { withCredentials: true }
+      );
+
+      toast.success(response.data.message);
+      setIsAuthenticated(true);
+      navigateTo("/");
+      setFullName("");
+      setEmail("");
+      setPhone("");
+      setNic("");
+      setDob("");
+      setGender("");
+      setPassword("");
+      setDoctorDepartment("");
     } catch (error) {
       toast.error(error.response.data.message);
     }

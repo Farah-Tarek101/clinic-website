@@ -11,7 +11,7 @@ const Patients = () => {
     console.log("📡 Fetching patients...");
 
     axios
-      .get("http://localhost:4000/api/v1/user/patients", { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/user/patients`, { withCredentials: true })
       .then((res) => {
         console.log("✅ Fetched patients:", res.data.patients);
         setPatients(res.data.patients);

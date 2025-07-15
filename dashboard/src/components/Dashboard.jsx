@@ -17,12 +17,9 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:4000/api/v1/appointment/getall",
-          { withCredentials: true }
-        );
-        setAppointments(data.appointments);
-        setFilteredAppointments(data.appointments);
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/appointment/getall`, { withCredentials: true });
+        setAppointments(response.data.appointments);
+        setFilteredAppointments(response.data.appointments);
       } catch (error) {
         setAppointments([]);
         setFilteredAppointments([]);
@@ -32,12 +29,9 @@ const Dashboard = () => {
 
     const fetchDoctorsCount = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:4000/api/v1/user/doctors",
-          { withCredentials: true }
-        );
-        if (data && data.doctors) {
-          setDoctorsCount(data.doctors.length);
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/user/doctors`, { withCredentials: true });
+        if (response.data && response.data.doctors) {
+          setDoctorsCount(response.data.doctors.length);
         } else {
           console.log("No doctors data received");
           setDoctorsCount(0);
@@ -61,11 +55,8 @@ const Dashboard = () => {
 
   const handleUpdateStatus = async (appointmentId, status) => {
     try {
-      const { data } = await axios.put(
-        `http://localhost:4000/api/v1/appointment/update/${appointmentId}`,
-        { status },
-        { withCredentials: true }
-      );
+      const updateData = { status };
+      const response = await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/v1/appointment/update/${appointmentId}`, updateData, { withCredentials: true });
       setAppointments((prevAppointments) =>
         prevAppointments.map((appointment) =>
           appointment._id === appointmentId
@@ -73,7 +64,7 @@ const Dashboard = () => {
             : appointment
         )
       );
-      toast.success(data.message);
+      toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -81,15 +72,12 @@ const Dashboard = () => {
 
   const handleDeleteAppointment = async (appointmentId) => {
     try {
-      const { data } = await axios.delete(
-        `http://localhost:4000/api/v1/appointment/delete/${appointmentId}`,
-        { withCredentials: true }
-      );
+      const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/v1/appointment/delete/${appointmentId}`, { withCredentials: true });
       // Filter out the deleted appointment from the state
       setAppointments((prevAppointments) =>
         prevAppointments.filter((appointment) => appointment._id !== appointmentId)
       );
-      toast.success(data.message);
+      toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message || "Error deleting appointment");
     }
