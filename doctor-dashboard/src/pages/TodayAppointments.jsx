@@ -1,37 +1,41 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const Appointments = () => {
+const TodayAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [dateFilter, setDateFilter] = useState("all");
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchAppointments();
+    fetchTodayAppointments();
   }, []);
 
-  const fetchAppointments = async () => {
+  const fetchTodayAppointments = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(`http://localhost:4000/api/v1/appointment/doctor/all`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/appointment/doctor/today`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+      console.log("📅 Today's appointments received:", response.data.appointments);
       setAppointments(response.data.appointments);
     } catch (error) {
-      console.error('❌ Error fetching appointments:', error);
-      setError('Failed to fetch appointments');
+      console.error('❌ Error fetching today\'s appointments:', error);
+      setError('Failed to fetch today\'s appointments');
     } finally {
       setLoading(false);
     }
   };
 
   const filteredAppointments = appointments.filter(appointment => {
+    // Debug: Log the first appointment to see its structure
+    if (appointments.length > 0 && appointments.indexOf(appointment) === 0) {
+      console.log("🔍 First appointment structure:", appointment);
+    }
+    
     const searchLower = searchTerm.toLowerCase();
     
     // Search in populated userId fields
@@ -39,25 +43,8 @@ const Appointments = () => {
     const emailMatch = (appointment.userId?.email || '').toLowerCase().includes(searchLower);
     const phoneMatch = (appointment.userId?.phone || '').toLowerCase().includes(searchLower);
     
-    const matchesSearch = nameMatch || emailMatch || phoneMatch;
-    
-    const matchesStatus = statusFilter === "all" || appointment.status === statusFilter;
-    
-    const matchesDate = dateFilter === "all" || 
-                       (dateFilter === "today" && appointment.appointment_date === new Date().toISOString().split('T')[0]) ||
-                       (dateFilter === "tomorrow" && appointment.appointment_date === new Date(Date.now() + 86400000).toISOString().split('T')[0]) ||
-                       (dateFilter === "this-week" && isThisWeek(appointment.appointment_date));
-
-    return matchesSearch && matchesStatus && matchesDate;
+    return nameMatch || emailMatch || phoneMatch;
   });
-
-  const isThisWeek = (dateString) => {
-    const appointmentDate = new Date(dateString);
-    const today = new Date();
-    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
-    const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
-    return appointmentDate >= startOfWeek && appointmentDate <= endOfWeek;
-  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -81,19 +68,17 @@ const Appointments = () => {
 
   const handleStatusUpdate = async (appointmentId, newStatus) => {
     try {
-      const token = localStorage.getItem('authToken');
       const response = await axios.put(
-        `http://localhost:4000/api/v1/appointment/doctor/update-status/${appointmentId}`,
+        `${import.meta.env.VITE_API_URL}/api/v1/appointment/doctor/update-status/${appointmentId}`,
         { status: newStatus },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
             'Content-Type': 'application/json'
           }
         }
       );
 
-      // Update local state with the response
       setAppointments(prev => 
         prev.map(apt => 
           apt._id === appointmentId ? { ...apt, status: newStatus } : apt
@@ -108,7 +93,7 @@ const Appointments = () => {
     }
   };
 
-  const getAppointmentStats = () => {
+  const getTodayStats = () => {
     const total = appointments.length;
     const approved = appointments.filter(apt => apt.status === 'approved').length;
     const pending = appointments.filter(apt => apt.status === 'pending').length;
@@ -118,13 +103,13 @@ const Appointments = () => {
     return { total, approved, pending, completed, cancelled };
   };
 
-  const stats = getAppointmentStats();
+  const stats = getTodayStats();
 
   if (loading) {
     return (
       <div className="loading">
         <div className="loading-spinner"></div>
-        Loading appointments...
+        Loading today's appointments...
       </div>
     );
   }
@@ -134,20 +119,23 @@ const Appointments = () => {
       {/* Header */}
       <div className="dashboard-header">
         <div>
-          <h1 className="header-title">My Appointments</h1>
+          <h1 className="header-title">Today's Appointments</h1>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
-            Manage and view all your scheduled appointments
+            Manage your appointments for {new Date().toLocaleDateString()}
           </p>
         </div>
         <div className="header-actions">
+          <button className="btn btn-primary" onClick={fetchTodayAppointments}>
+            🔄 Refresh
+          </button>
         </div>
       </div>
 
-      {/* Statistics */}
+      {/* Today's Statistics */}
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-number">{stats.total}</div>
-          <div className="stat-label">Total Appointments</div>
+          <div className="stat-label">Total Today</div>
         </div>
         <div className="stat-card">
           <div className="stat-number">{stats.approved}</div>
@@ -167,50 +155,23 @@ const Appointments = () => {
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Search */}
       <div className="dashboard-card" style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-          <div className="form-group" style={{ margin: 0, minWidth: '300px' }}>
-            <input
-              type="text"
-              placeholder="Search by patient name or email..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="form-input"
-            />
-          </div>
-          
-          <select 
-            value={statusFilter} 
-            onChange={(e) => setStatusFilter(e.target.value)}
+        <div className="form-group" style={{ margin: 0 }}>
+          <input
+            type="text"
+            placeholder="Search patients by name or email..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="form-input"
-            style={{ minWidth: '150px' }}
-          >
-            <option value="all">All Status</option>
-            <option value="approved">Approved</option>
-            <option value="pending">Pending</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-
-          <select 
-            value={dateFilter} 
-            onChange={(e) => setDateFilter(e.target.value)}
-            className="form-input"
-            style={{ minWidth: '150px' }}
-          >
-            <option value="all">All Dates</option>
-            <option value="today">Today</option>
-            <option value="tomorrow">Tomorrow</option>
-            <option value="this-week">This Week</option>
-          </select>
+          />
         </div>
       </div>
 
-      {/* Appointments Table */}
+      {/* Today's Appointments Table */}
       <div className="table-container">
         <div className="table-header">
-          <h2 className="table-title">Appointment Schedule</h2>
+          <h2 className="table-title">Today's Schedule</h2>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
             Showing {filteredAppointments.length} of {appointments.length} appointments
           </p>
@@ -220,8 +181,8 @@ const Appointments = () => {
           <table className="table">
             <thead>
               <tr>
+                <th>Time</th>
                 <th>Patient Info</th>
-                <th>Date & Time</th>
                 <th>Department</th>
                 <th>Medical Info</th>
                 <th>Status</th>
@@ -229,8 +190,15 @@ const Appointments = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredAppointments.map((appointment) => (
-                <tr key={appointment._id}>
+              {filteredAppointments
+                .sort((a, b) => a.appointment_time.localeCompare(b.appointment_time))
+                .map((appointment, index) => (
+                <tr key={`${appointment._id}-${index}`}>
+                  <td>
+                    <div style={{ fontWeight: '600', fontSize: '1.1rem' }}>
+                      {appointment.appointment_time}
+                    </div>
+                  </td>
                   <td>
                     <div>
                       <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>
@@ -241,16 +209,6 @@ const Appointments = () => {
                       </div>
                       <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
                         {appointment.userId?.phone || 'No phone'}
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div>
-                      <div style={{ fontWeight: '500', marginBottom: '0.25rem' }}>
-                        {new Date(appointment.appointment_date).toLocaleDateString()}
-                      </div>
-                      <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                        {appointment.appointment_time}
                       </div>
                     </div>
                   </td>
@@ -289,6 +247,14 @@ const Appointments = () => {
                       <button 
                         className="btn btn-outline" 
                         style={{ padding: '0.5rem', fontSize: '0.75rem' }}
+                        onClick={() => handleStatusUpdate(appointment._id, 'approved')}
+                        disabled={appointment.status === 'approved'}
+                      >
+                        ✅ Approve
+                      </button>
+                      <button 
+                        className="btn btn-outline" 
+                        style={{ padding: '0.5rem', fontSize: '0.75rem' }}
                         onClick={() => handleStatusUpdate(appointment._id, 'completed')}
                         disabled={appointment.status === 'completed'}
                       >
@@ -314,8 +280,8 @@ const Appointments = () => {
         ) : (
           <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📅</div>
-            <h3>No appointments found</h3>
-            <p>Try adjusting your filters or schedule a new appointment.</p>
+            <h3>No appointments today</h3>
+            <p>You have no scheduled appointments for today.</p>
           </div>
         )}
       </div>
@@ -323,4 +289,4 @@ const Appointments = () => {
   );
 };
 
-export default Appointments;
+export default TodayAppointments; 
