@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import './Aboutus.css';
+import './AboutUs.css';
 
 const AboutUs = () => {
   const { t } = useTranslation(); // Hook for translations
