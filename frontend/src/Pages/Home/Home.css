@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: url('public/Hero.jpg') center center/cover no-repeat;
+  background: url('/Hero.jpg') center center/cover no-repeat;
   height: 70vh;
   text-align: center;
   color: white;
